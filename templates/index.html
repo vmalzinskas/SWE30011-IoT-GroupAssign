@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Temperature</title>
+</head>
+<body>
+    <h1>Current Temperature: {{ current_temp }}</h1>
+    <h2>Target Temperature: {{ target_temp }}</h2>
+    <form action="/api/endpoint" method="post">
+        <input type="hidden" name="current_temp" value="{{ current_temp }}">
+        <label for="new_target_temp">Enter New Target Temperature:</label><br>
+        <input type="text" id="new_target_temp" name="new_target_temp"><br>
+        <input type="submit" value="Update Target Temperature">
+    </form>
+</body>
+</html>
