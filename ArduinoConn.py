@@ -7,7 +7,7 @@ class ArduinoConnection:
         self.serial_device = None
         # Establish connection to serial device
         try:
-            self.serial_device = serial.Serial('/dev/ttyS0', 9600)  # Change 'COM4' to the appropriate COM port
+            self.serial_device = serial.Serial('COM4', 9600)  # Change 'COM4' to the appropriate COM port
         except serial.SerialException:
             print("Warning: Failed to establish connection to COM4.")
         self.data = None
@@ -16,7 +16,7 @@ class ArduinoConnection:
         self.control_string = []
 
     def send_to_mediator(self):
-        self.mediator.receive_message(message('controller', self.data))
+        self.mediator.receive_message(message('thingsboard', self.data))
 
     def receive_message(self, msg):
         # print('arduino ',  msg.get_data())

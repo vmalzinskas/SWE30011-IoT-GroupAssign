@@ -7,7 +7,7 @@ class DatabaseHandler:
         self.user = user
         self.password = password
         self.database = database
-        self.conn = self.connect()
+        #self.conn = self.connect()
         self.data = None
 
     def connect(self):
