@@ -1,12 +1,10 @@
-from tkinter import Tk
 from Mediator import Mediator
 from Controller import Controller
 from ArduinoConn import ArduinoConnection
 from DatabaseManager import DatabaseHandler
 from Client import ServerAPI
 from thingsBoardSend import ThingsBoardCtrl
-import threading
-import time
+
 
 
 if __name__ == "__main__":
