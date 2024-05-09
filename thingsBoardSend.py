@@ -9,7 +9,7 @@ class ThingsBoardCtrl:
         self.data = None
         self.client1= paho.Client(mqtt_client.CallbackAPIVersion.VERSION2 , client_id="2x0Wmp5bMNtXOAfGIbum")
         self.client1.on_publish = on_publish
-        self.client1.username_pw_set('2x0Wmp5bMNtXOAfGIbum')               
+        self.client1.username_pw_set('2x0Wmp5bMNtXOAfGIbum')   # Vincent's access token: '2x0Wmp5bMNtXOAfGIbum'   # Charles' access token: 'E3TRclyItqtBWnAhnxWO'  # Andrew's access token: 'kS2cHltahsgAc6Zju3xR'
         self.client1.connect("thingsboard.cloud",1883,keepalive=60)
         self.client1.on_connect = on_connect
 
