@@ -65,10 +65,6 @@ void loop() {
     Serial.print(",");
     Serial.print(humidity);
     Serial.print(",");
-    Serial.print("20"); // Additional data (replace with actual value)
-    Serial.print(",");
-    Serial.print("75"); // Additional data (replace with actual value)
-    Serial.print(",");
     if (rfidTag != "") {
       Serial.println(rfidTag);
     } else {

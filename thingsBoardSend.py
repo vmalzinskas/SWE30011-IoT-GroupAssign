@@ -35,10 +35,7 @@ class ThingsBoardCtrl:
                      "Uptime":"{data[0]}",
                      "temperature Rm1": {data[1]},
                      "humidity Rm1": {data[2]},
-                     "User Rm1": "{data[3]}",
-                     "temperature Rm2": {data[4]},
-                     "humidity Rm2": {data[5]},
-                     "User Rm2": "{data[6]}"
+                     "User Rm1": "{data[3]}"
                      }}'''
         # payload=f'{{"data":{data}}}'
         # payload = '{Temperature:0, Bob:5}'
