@@ -7,7 +7,7 @@ class ThingsBoardCtrl:
     def __init__(self, mediator):
         self.mediator = mediator
         self.data = None
-        self.client1= paho.Client(mqtt_client.CallbackAPIVersion.VERSION2 , client_id="2x0Wmp5bMNtXOAfGIbum")
+        self.client1 = paho.Client(client_id="2x0Wmp5bMNtXOAfGIbum", protocol=paho.MQTTv5)
         self.client1.on_publish = on_publish
         self.client1.username_pw_set('2x0Wmp5bMNtXOAfGIbum')   # Vincent's access token: '2x0Wmp5bMNtXOAfGIbum'   # Charles' access token: 'E3TRclyItqtBWnAhnxWO'  # Andrew's access token: 'kS2cHltahsgAc6Zju3xR'
         self.client1.connect("thingsboard.cloud",1883,keepalive=60)
@@ -33,9 +33,9 @@ class ThingsBoardCtrl:
 
         payload = f'''{{
                      "Uptime":"{data[0]}",
-                     "temperature Rm1": {data[1]},
-                     "humidity Rm1": {data[2]},
-                     "User Rm1": "{data[3]}"
+                     "temperature": {data[1]},
+                     "humidity": {data[2]},
+                     "User": "{data[3]}"
                      }}'''
         # payload=f'{{"data":{data}}}'
         # payload = '{Temperature:0, Bob:5}'
@@ -43,8 +43,10 @@ class ThingsBoardCtrl:
         print("Device telemetry updated")
         print(payload);
 
-def on_publish(client,userdata,result, reasoncode, properties):
-    print("data published to thingsboard \n")
+def on_publish(client, userdata, mid):
+    print("Data published to ThingsBoard with message id:", mid)
+
+
 
 def on_connect(client, userdata, flags, rc):
     flag_connected = 1
