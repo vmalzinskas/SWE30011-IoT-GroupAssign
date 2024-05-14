@@ -1,37 +1,36 @@
 from Mediator import Mediator
 from Controller import Controller
-from ArduinoConn import ArduinoConnection
 from DatabaseManager import DatabaseHandler
-from Client import ServerAPI
-from thingsBoardSend import ThingsBoardCtrl
+import paho.mqtt.client as mqtt
 
-
+# Callback function to handle incoming messages
+def on_message(client, userdata, message):
+    print(f"Received message: {message.payload.decode()} on topic {message.topic}")
 
 if __name__ == "__main__":
-    target_temp = 0
-    url = 'http://0.0.0.0:8000/api/endpoint'
 
-    # Create an instance of the Mediator class
-    mediator = Mediator()
-
-    arduino = ArduinoConnection(mediator)
     database_manager = DatabaseHandler(host="localhost", user="user1", password="password1", database="Temp")
-    controller = Controller(mediator, arduino, database_manager, target_temp=target_temp)
-    Client = ServerAPI(mediator=mediator, url=url)
-    thingsB = ThingsBoardCtrl(mediator)
 
-    mediator.add_to_comms('databaseManager', database_manager)
-    mediator.add_to_comms('arduino', arduino)
-    mediator.add_to_comms('controller', controller)
-    mediator.add_to_comms('webserver', Client)
-    mediator.add_to_comms('thingsboard', thingsB)
+    controllerVincent = Controller(database_manager)
+    controllerAndrew = Controller(database_manager)
+    controllerCharles = Controller(database_manager)
 
-    # Create the root window for GUI (if needed)
-    # root = Tk()
-    # Create an instance of the VariableDisplayGUI class (if needed)
-    # variable_display = VariableDisplayGUI(root, mediator, target_temp)
 
-    # Main loop of your program
-    while True:
-        arduino.receive_data()
-        mediator.send_messages()
+    # Create a client instance
+    client = mqtt.Client()
+
+    # Assign the on_message callback function
+    client.on_message = on_message
+
+    # Connect to the MQTT broker
+    broker_address = "your_broker_address"
+    broker_port = 1883
+    client.connect(broker_address, broker_port)
+
+    # Subscribe to multiple topics
+    topics = [("topic1", 0), ("topic2", 0), ("topic3", 0)]
+    client.subscribe(topics)
+
+    # Start the loop to listen for messages
+    client.loop_forever()
+
