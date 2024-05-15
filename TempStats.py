@@ -12,9 +12,11 @@ class TempStats:
         self.humidData = []
         self.deltaTempSec = 0
         self.degreeCfromIdeal = 0
+        self.user = None
 
         self.stats = None
-        
+        self.next_hour_temp = None
+
     def get_humidity(self):
         return self.humidData[-1]
 
@@ -24,6 +26,10 @@ class TempStats:
     def get_temp(self):
         # print("returning temp to controller")
         return self.tempData[-1]
+
+    def set_next_hour_temp(self, temp):
+        self.next_hour_temp = temp
+
 
     def receive_data(self, data):
         # print("tempStats ", data)
@@ -36,7 +42,7 @@ class TempStats:
     def process_data(self):
         try:
             # Split the string at the comma to separate time and temperature
-            time_str, temp_str, humid_str = self.data.split(',')
+            time_str, temp_str, humid_str, user = self.data.split(',')
 
             # Convert temperature string to float
             temperature = float(temp_str)
@@ -50,6 +56,7 @@ class TempStats:
             self.timeData.append(time_obj)  # Store time data
             self.tempData.append(temperature)  # Store temperature data
             self.humidData.append(humidity)
+            self.user = user
         except ValueError:
             print("Invalid temperature value:", temp_str)
 
@@ -65,4 +72,5 @@ class TempStats:
             self.deltaTime = deltaTime
             self.deltaTempSec = np.round(deltaTemp / deltaTime, 2)
             self.degreeCfromIdeal = np.round(self.target_temp - current_temp, 2)
-            self.stats = [current_temp, current_humidity, self.deltaTempSec, self.degreeCfromIdeal]
+            degreeCfromIdealNextHour = np.round(self.target_temp - self.next_hour_temp, 2)
+            self.stats = [current_temp, current_humidity, self.deltaTempSec, self.degreeCfromIdeal, degreeCfromIdealNextHour]

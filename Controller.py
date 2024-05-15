@@ -1,6 +1,7 @@
 from TempControl import TempControl
 from TempStats import TempStats
 from msg import message
+from WeatherAPI import WeatherApiClient
 
 class Controller:
     def __init__(self, mediator, arduino, databasemanager, target_temp):
@@ -10,7 +11,7 @@ class Controller:
         self.data = None
         self.stats = None
         self.controlString = ['', '']
-
+        self.local_temp_api = WeatherApiClient(latitude=-37.814, longitude=144.9633, timezone="GMT")
         # self.temp_control.set_receiver(arduino)
         # self.temp_stats.set_receiver(databasemanager)
 
@@ -26,9 +27,19 @@ class Controller:
             self.process_data()
         elif channel == 'set_temp':
             self.set_temp(msg.data)
+        elif channel == 'user':
+            self.process_user(msg.data)
         else:
             # Handle other cases if needed
             pass
+
+    def process_user(self, data):
+        time_str, temp_str, humid_str, user = data.split(',')
+        # print(f"controller {user}")
+        if (user == '03d7ddb6'):
+            self.set_temp(23)
+            self.send_to_mediator(message('webserver', 23, 'user_target_temp'))
+            print('accepted user')
 
     def set_temp(self, temp):
         # update stats and control with new ideal temp
@@ -41,6 +52,9 @@ class Controller:
     #     self.mediator.pass_data(self.data)
 
     def process_data(self):
+        nextHourTemp = self.local_temp_api.get_next_hour_temperature()
+        self.temp_stats.set_next_hour_temp(nextHourTemp);
+        # print(f'Controller, nextHourTemp {nextHourTemp}')
         self.temp_stats.receive_data(self.data)
         self.stats = self.temp_stats.export_stats()
         if self.stats is not None:

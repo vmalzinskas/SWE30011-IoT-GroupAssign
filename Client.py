@@ -7,6 +7,7 @@ class ServerAPI:
         self.mediator = mediator
         self.target_temp = None
         self.current_temp = None
+        self.new_target_temp = None
     def send_to_mediator(self, msg):
         self.mediator.receive_message(message('controller', channel='set_temp', data=self.target_temp))
 
@@ -18,6 +19,10 @@ class ServerAPI:
         elif channel == 'device_temp':
                 self.default_device_temp = msg.get_data()
                 self.run()
+        elif channel == 'user_target_temp':
+                print(f'new user targer temp: {msg.get_data()}')
+                self.new_target_temp = msg.get_data()
+                self.run()
         else:
                 pass
 
@@ -26,8 +31,13 @@ class ServerAPI:
         data = self.get_data()
         if data is not None and isinstance(data.get('target_temp'), float):
             # current_temp = float(input("Enter the current temperature: "))
-            self.target_temp = data['target_temp']
+            if self.new_target_temp is not None:
+                self.target_temp = self.new_target_temp
+                self.new_target_temp = None
+            else:
+                self.target_temp = data['target_temp']
             self.send_to_mediator(message('Controller', 'set_temp', self.target_temp))
+
             if self.target_temp is not None:
                 self.set_data(self.current_temp, self.target_temp)
             else:
@@ -53,10 +63,11 @@ class ServerAPI:
         data = {'current_temp': current_temp, 'new_target_temp': new_target_temp}
         response = requests.post(self.url, data=data)
         if response.status_code == 200:
-            print('Data successfully sent to server')
+            # print('Data successfully sent to server')
             updated_data = self.get_data()  # Retrieve updated data from the server
             if updated_data:
-                print('Updated Data:', updated_data)
+                # print('Updated Data:', updated_data)
+                pass
         else:
             print('Error:', response.status_code)
 

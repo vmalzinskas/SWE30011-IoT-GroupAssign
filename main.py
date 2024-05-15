@@ -8,7 +8,7 @@ from thingsBoardSend import ThingsBoardCtrl
 
 if __name__ == "__main__":
     target_temp = 0
-    url = 'http://0.0.0.0:8000/api/endpoint'
+    url = 'http://127.0.0.1:8000/api/endpoint'
 
     # Create an instance of the Mediator class
     mediator = Mediator()

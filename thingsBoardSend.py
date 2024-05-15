@@ -7,6 +7,9 @@ class ThingsBoardCtrl:
     def __init__(self, mediator):
         self.mediator = mediator
         self.data = None
+        self.start()
+
+    def start(self):
         self.client1 = paho.Client(client_id="2x0Wmp5bMNtXOAfGIbum", protocol=paho.MQTTv5)
         self.client1.on_publish = on_publish
         self.client1.username_pw_set('2x0Wmp5bMNtXOAfGIbum')   # Vincent's access token: '2x0Wmp5bMNtXOAfGIbum'   # Charles' access token: 'E3TRclyItqtBWnAhnxWO'  # Andrew's access token: 'kS2cHltahsgAc6Zju3xR'
@@ -40,11 +43,12 @@ class ThingsBoardCtrl:
         # payload=f'{{"data":{data}}}'
         # payload = '{Temperature:0, Bob:5}'
         ret = self.client1.publish("v1/devices/me/telemetry",payload)
-        print("Device telemetry updated")
-        print(payload);
+        # print("Device telemetry updated") #################### uncomment here to see telemetry data pushed
+        # print(payload); #################### uncomment here to see telemetry data pushed
 
 def on_publish(client, userdata, mid):
-    print("Data published to ThingsBoard with message id:", mid)
+    pass
+    # print("Data published to ThingsBoard with message id:", mid)
 
 
 

@@ -7,7 +7,7 @@ class DatabaseHandler:
         self.user = user
         self.password = password
         self.database = database
-        #self.conn = self.connect()
+        self.conn = self.connect()
         self.data = None
 
     def connect(self):
@@ -31,13 +31,13 @@ class DatabaseHandler:
 
     def export_data(self):
         current_time = datetime.now()
-        # print(current_time, data)
+        # print(current_time, self.data)
         try:
             cursor = self.conn.cursor()
-            sql = f"INSERT INTO TempRecord (timeData, tempData, humidityData, deltaTempSec, degreeCfromTarget) VALUES ('{current_time}', {self.data[0]}, {self.data[1]}, {self.data[2]}, {self.data[3]})"  # Using parameterized query
+            sql = f"INSERT INTO grouptemprecord (timeData, tempData, humidityData, deltaTempSec, degreeCfromIdeal) VALUES ('{current_time}', {self.data[0]}, {self.data[1]}, {self.data[2]}, {self.data[3]})"  # Using parameterized query
             cursor.execute(sql) 
             self.conn.commit()
-            print("Data inserted successfully")
+            # print("Data inserted successfully")
         except mysql.connector.Error as err:
             print("Error: ", err)
             self.conn.rollback()
